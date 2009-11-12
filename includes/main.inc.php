@@ -48,7 +48,7 @@ require_once('external_lib/Smarty/Smarty.class.php');
 // Deploy the renderer.
 $renderer = new Smarty();
 
-$renderer->template_dir = $APP_CONFIG['template_path'].'/templates/';
+$renderer->template_dir = $APP_CONFIG['template_path'].'/templates/'.$APP_CONFIG['default_template'];
 $renderer->compile_dir = $APP_CONFIG['template_path'].'/templates_c/';
 $renderer->config_dir = $APP_CONFIG['template_path'].'/configs/';
 $renderer->cache_dir = $APP_CONFIG['template_path'].'/cache/';
@@ -122,6 +122,17 @@ $online = new UserOnline($db);
 if($logged_in == true)
 {
     $online = $online->findOneByUserId($User->getUserId());
+    $user_style = $User->getTemplate();
+    if ($user_style != "" )
+    {
+    	$template = new template($db);
+        $template = $template->findOneByFolder($user_style);
+
+        if($template != null)
+        {
+        	$renderer->template_dir = $APP_CONFIG['template_path'].'/templates/'.$user_style;
+        }    
+    }
 } // end is a user
 else
 {

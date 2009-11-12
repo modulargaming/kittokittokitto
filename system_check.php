@@ -65,18 +65,23 @@ $content .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n\
 $content .= "<html>\n";
     $content .= "<head>\n";
         $content .= "<meta http-equiv='Content-type' content='text/html; charset=UTF-8' />\n";
-        $content .= "<title>KittoKittoKitto System Check</title>\n";
+        $content .= "<title>Modular Gaming System Check</title>\n";
     $content .= "</head>\n";
     $content .= "<body>\n";
-        $content .= "<p>Any 'status' fields marked in <span style='color: red;'>red</span> indicate that you have a serious problem and it must be addressed for Kitto to work. <span style='color: $yellow;'>Yellow</span> 'status' fields indicate a warning - Kitto will work, but you probably want to take the suggested corrective action. <span style='color: green;'>Green</span> means OK. The base directory is provided here for your reference - you need it during installation.</p>\n";
+        $content .= "<p>Any 'status' fields marked in <span style='color: red;'>red</span> indicate that you have a serious problem 
+and it must be addressed for Modular Gaming to work. <span style='color: $yellow;'>Yellow</span> 'status' fields indicate a warning - 
+Modular Gaming will 
+work, but you probably want to take the suggested corrective action. <span style='color: green;'>Green</span> means OK. The base directory is provided here for your reference - you need it during installation.</p>\n";
 
-        $content .= "<p>Make sure you visit the <a href='http://kittokittokitto.yasashiisyndicate.org/'>KittoKittoWiki</a> often - new releases, news, and developer guides are available there.</p>\n";
-        $content .= "<p>If everything looks green, you can proceed with <a href='http://kittokittokitto.yasashiisyndicate.org/wiki/Installing'>installing Kitto</a>.</p>\n";
+        $content .= "<p>Make sure you visit the <a href='http://modulargaming.com'>Modular Gaming</a> site often - new releases, news, 
+and developer guides are available there.</p>\n";
+        $content .= "<p>If everything looks green, you can proceed with <a 
+href='http://modulargaming.com/projects/modulargaming/wiki/Install'>installing Modular Gaming</a>.</p>\n";
 
         $content .= "<div align='center'>\n";
             $content .= "<table style='border: 1px solid black; border-collapse: collapse;' width='50%' border='1' cellpadding='5'>\n";
                 $content .= "<tr>\n";
-                    $content .= "<td colspan='2' align='center' style='font-weight: bold; font-size: large;'>KittoKittoKitto System Check</td>\n";
+                    $content .= "<td colspan='2' align='center' style='font-weight: bold; font-size: large;'>Modular Gaming System Check</td>\n";
                 $content .= "</tr>\n";
 
                 $content .= "<tr>\n";

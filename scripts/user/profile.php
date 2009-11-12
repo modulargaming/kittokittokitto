@@ -30,7 +30,8 @@
  **/
 
 $ERRORS = array();
-$user_id = stripinput($_REQUEST['user_id']);
+$uri->name(array("user_id"));
+$user_id = stripinput($_URI['user_id']);
 
 $profile = new User($db);
 $profile = $profile->findOneByUserId($user_id);
@@ -57,6 +58,8 @@ else
         'profile' => $profile->getProfile(),
         'title' => $profile->getUserTitle(),
         'posts' => $profile->getPostCount(),
+    	'ref' => $profile->getRef(),
+		'refby' => $profile->getRefby(),
     );
 
     // Add a special note if needed.

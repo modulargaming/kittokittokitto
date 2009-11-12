@@ -43,7 +43,7 @@
  * @subpackage Messages
  * @version 1.0.0
  **/
-
+$uri->name(array("type", "to_user_id", "all"));
 $ERRORS = array();
 $TO = array(); // id => name
 $MESSAGE = array(
@@ -69,9 +69,9 @@ if($_POST['error'] == 'true')
         'body' => clean_xhtml($_POST['message']['body']),
     );
 } // end error postback
-elseif(isset($_REQUEST['to_user_id']) && $_REQUEST['to_user_id'] != '')
+elseif(isset($_URI['to_user_id']) && $_URI['to_user_id'] != '')
 {
-    $to_user_id = stripinput($_REQUEST['to_user_id']);
+    $to_user_id = stripinput($_URI['to_user_id']);
     
     $to = new User($db);
     $to = $to->findOneByUserId($to_user_id);
@@ -85,9 +85,9 @@ elseif(isset($_REQUEST['to_user_id']) && $_REQUEST['to_user_id'] != '')
         $TO[] = $to->getUserName(); 
     }
 } // end to_user_id - new message w/ user specified
-elseif(isset($_REQUEST['reply_to_id']))
+elseif(isset($_URI['reply_to_id']))
 {
-    $reply_to_id = stripinput($_REQUEST['reply_to_id']);
+    $reply_to_id = stripinput($_URI['reply_to_id']);
     
     $original = new Message($db);
     $original = $original->findOneByUserMessageId($reply_to_id);
@@ -107,7 +107,7 @@ elseif(isset($_REQUEST['reply_to_id']))
             $MESSAGE['title'] = 'RE: '.$original->getMessageTitle();
             $MESSAGE['body'] = "\n\n\n<blockquote><p style='font-weight: bold;'>{$original->getSenderUserName()} wrote:</p>\n{$original->getMessageBody()}</blockquote>\n\n";
 
-            if(strtolower($_REQUEST['reply_to_all']) == 'all')
+            if(strtolower($_URI['all']) == 'all')
             {
                 $list = $original->getRecipientList();
                 unset($list[$User->getUserId()]);

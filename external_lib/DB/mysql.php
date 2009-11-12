@@ -27,7 +27,11 @@
 /**
  * Obtain the DB_common class so it can be extended from
  */
-require_once 'DB/common.php';
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    require_once('common.php');
+} else {
+    require_once 'DB/common.php';
+}
 
 /**
  * The methods PEAR DB uses to interact with PHP's mysql extension

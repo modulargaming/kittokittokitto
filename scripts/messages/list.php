@@ -30,13 +30,13 @@
  **/
 
 $max_messages_per_page = 15;
-
+$uri->name(array("page"));
 switch($_REQUEST['state'])
 {
     default:
     {
         // Handle the page ID for slicing and dicing the inventory up.
-        $page_id = stripinput($_REQUEST['page']);
+        $page_id = stripinput($_URI['page']);
         if($page_id == null || $page_id <= 0)
         {
             $page_id = 1;

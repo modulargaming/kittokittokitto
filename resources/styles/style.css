@@ -1,118 +1,214 @@
-body {
-	background: #F3F4EC;
-	color: #474E44;
-}
+/*#############################################################
+Name: Transparentia
+Date: 2006-08-20
+Description: Simple, lightweight and slightly blue.
+Author: Viktor Persson
+URL: http://templates.arcsin.se
 
+Feel free to use and modify but please provide credits.
+#############################################################*/
+
+/* standard elements */
+* {
+	margin: 0;
+	padding: 0;
+}
 a {
-    color: #3C657B;
-    text-decoration: none;
+	color: #36C;
 }
-
 a:hover {
-    text-decoration:underline;
+	color: #06F;
 }
-
-#header {
-    padding: 0px;   
-    margin-top: 0.3em;
-    padding-top:1em;    
-    padding-bottom:1em;
-    margin-bottom:0px;
-    border-bottom: 1px solid #bab1b1;
-    background: #CCCFBC;
-    text-align:right;
-    padding-right: 2em;
-    padding-left: .5em;
+body {
+	background: #EEE url(../images/bg.gif);
+	color: #444;
+	font: normal 62.5% "Lucida Sans Unicode",sans-serif;
+	margin: 0;
 }
-
-#header h1 {
-    padding:0px;
-    margin: 0px;
-    margin-bottom:0.3em;
-    font-size: 1.2em;
-    letter-spacing:0.2em;
+input {
+	color: #555;
+	font: normal 1.1em "Lucida Sans Unicode",sans-serif;
 }
-
-#header h1 a {
-    color: #5B7B57;
-    text-decoration: none;
+p,cite,code,ul {
+	font-size: 1.2em;
+	padding-bottom: 1.2em;
 }
-
-#header h1 a:hover {
-    text-decoration: none;
-    color: #bb4444;
-}
-
 h1 {
-	font-size: xx-large;
-	color: #880000;
-	font-weight: bold;
-	margin-top: 1px;
-	margin-bottom: 3px;
+	font-size: 1.4em;
+	margin-bottom: 4px;
 }
-
-h2 {
+code {
+	background: url(../images/bgcode.gif);
+	border: 1px solid #F0F0F0;
+	border-left: 6px solid #39F;
+	color: #555;
 	display: block;
-	width: 100%;
-	background: #87A284;
-	font-size: large;
-	color: white;
-	padding: 3px;
+	font: normal 1.1em "Lucida Sans Unicode",serif;
+	margin-bottom: 12px;
+	padding: 8px 10px;
+	white-space: pre;
+}
+cite {
+	background: url(../images/quote.gif) no-repeat;
+	color: #666;
+	display: block;
+	font: normal 1.3em "Lucida Sans Unicode",serif;
+	padding-left: 28px;
+}
+h1,h2,h3 {
+	color: #367EA6;
+	padding-top: 6px;
 }
 
-h3 {
-	font-size: large;
-	font-weight: bold;
-	color: #86924A;
+/* misc */
+.clearer {
+	clear: both;
 }
 
-#main-box {
-    margin-top: 5px;
-    padding-top: 5px;
-	width: 98%;
+/* structure */
+.container {
+	background: url(../images/bgcontainer.gif) repeat-y;
+	margin: 0 auto;
+	padding-bottom: 6px;
+	width: 767px;
+}
+.header {
+	background: url(../images/header.gif) repeat-x;
 }
 
-#left-column {
-    float: left;
-    width: 15%;
+.header a {
+	color: #FFF;
+	text-decoration: none
 }
 
-#right-column {
-    float: right;
-    width: 83%;
-    padding-left: 5px;
-}
-
-#footer {
-    border-top: 1px solid #324031;
-    border-bottom: 1px solid #324031;
-    color: #eee;
-    background: #87a284;
-    clear: both;
-    padding: 0.3em;
-    text-align: center;
-    margin-left: auto;
-    display: block;
-    margin-right: auto;
-    font-size: 1em;
-    margin-top: 5px;
-}
-
-#footer a {
-    color: #fff;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-#footer p
-{
-	margin: 0 0 0 2px;
-	font-size: x-small;
+/* title */
+.title h1 {
+	color: #FFF;
+	font: normal 3em Verdana,sans-serif;
+	height: 150px;
+	line-height: 150px;
+	margin-bottom: 8px;
 	text-align: center;
 }
 
-#footer p a img {
-    margin-top: 5px;
+/* navigation */
+.navigation {
+	margin-bottom: 4px;
+}
+.navigation a {
+	background-color: #4A91C3;
+	color: #FFF;
+	float: left;
+	font: bold 1.2em "Trebuchet MS",sans-serif;
+	padding: 8px 0;
+	width: 19%;
+	border-right: 1px solid #FFF;
+	text-align: center;
+	text-decoration: none;
+}
+.navigation a:hover {
+	background-color: #000;
+	color: #FFF;
+}
+
+/* main */
+.main {
+	clear: both;
+	padding: 8px 18px;
+}
+
+/* main left */
+.sidenav h1,.sidenav ul {
+	padding-left: 12px;
+}
+.sidenav {
+	background: #EEE;
+	border: 1px solid #E5E5E5;
+	float: left;
+	width: 200px;
+}
+.sidenav h1 {
+	color: #666;
+	font-size: 1.2em;
+	height: 20px;
+	margin-top: 1.2em;
+}
+.sidenav ul {
+	border-top: 1px solid #FAFAFA;
+	background: url(../images/bgul.gif) repeat-x;
+	margin: 0;
+	padding: 0;
+}
+.sidenav li {
+	border: 1px solid #FAFAFA;
+	border-top: none;
+	list-style: none;
+	margin: 0;
+}
+.sidenav li a {
+	color: #777;
+	display: block;
+	font-size: 0.9em;
+	padding: 3px 6px 3px 14px;
+	text-decoration: none;
+}
+.sidenav li a:hover {
+	color: #111;
+}
+
+/* content */
+.content {
+	float: right;
+	width: 520px;
+}
+.content .item {
+	padding: 6px 12px;
+	border: 1px solid #EEE;
+	background: #FFF;
+	margin-bottom: 8px;
+}
+.content .descr {
+	color: #333;
+	margin-bottom: 6px;
+}
+.content li {
+	list-style: url(../images/li.gif);
+	margin-left: 18px;
+}
+
+/* search form */
+form {
+	padding: 0 0 6px 8px;
+}
+.styled {
+	border: 1px solid #DDD;
+	padding: 4px;
+}
+.button {
+	background: url(../images/search.gif) no-repeat left bottom;
+	border: none;
+	height: 27px;
+	width: 27px;
+}
+
+/* footer */
+.footer {
+	background: #FFF;
+	border: 1px solid #EEE;
+	color: #666;
+	font-size: 1.1em;
+	margin: 0 auto;
+	text-align: center;
+	padding: 6px;
+	width: 480px;
+}
+.footer a {
+	color: #36C;
+	text-decoration: none;
+}
+.footer a:hover {
+	color: #06F;
+	text-decoration: underline;
 }
 
 /* == Shaded dataTable == */
@@ -123,7 +219,7 @@ h3 {
 }
 
 .dataTableHead {
-	background: #87A284;
+	background: #68AACC;
 	font-weight: bold;
 	font-size: large;
 	text-align: center;
@@ -131,17 +227,17 @@ h3 {
 }
 
 .dataTableSubhead {
-	background: #CCCFBC;
-    color: #5B7B57;
+	background: #0066FF;
+	    color: #5B7B57;
 	font-weight: 800;
 }
 
 .dataTableRow {
-	background: #EBEFD1;
+	background: #7AB7D6;
 }
 
 .dataTableRowAlt {
-	background: #DADFB5;
+	background: #FFFFFF;
 }
 
 /* Input Table Colors */
@@ -158,19 +254,20 @@ h3 {
 .inputTableHead
 {
     color: #5B7B57;
-    background-color: #CCCFBC;
+    background-color: #68AACC;
     text-align: center;
     font-weight: bold;
     font-size: x-large;
 }
 
 .inputTableRow {
-    background-color: #EBEFD1;
+    background-color: #68AACC;
+
     text-align: left;
 }
 
 .inputTableRowAlt {
-    background-color: #DADFB5;
+    background-color: #7AB7D6;
     text-align: left;
 }
 
@@ -251,7 +348,7 @@ h3 {
     margin: 0;
     padding: 0; 
     background-color: transparent;
-    color: #87A284;
+    color: #0066FF;
 }
 
 #breadcrumb-trail {
@@ -279,7 +376,7 @@ h3 {
     width: 18%;
     float: left;
     height: 100%;
-    background-color: #EBEFD1;
+    background-color: #7AB7D6;
     margin-right: 10px;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
@@ -319,7 +416,7 @@ h3 {
 .quick-reply {
     width: 80%;
     padding: 1em;
-    background-color: #EBEFD1;
+    background-color: #7AB7D6;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
     -opera-border-radius: 15px;
@@ -364,7 +461,7 @@ h3 {
     font-weight: bold;
     padding: .5em;
     margin-bottom: 1em;
-    background-color: #EBEFD1;
+    background-color: #7AB7D6;
     -moz-border-radius: 15px;
     -webkit-border-radius: 15px;
     -opera-border-radius: 15px;

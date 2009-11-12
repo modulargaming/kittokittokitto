@@ -27,7 +27,11 @@
 /**
  * Obtain the PEAR class so it can be extended from
  */
-require_once 'PEAR.php';
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    require_once ("external_lib/PEAR.php");
+} else {
+    require_once 'PEAR.php';
+}
 
 /**
  * DB_common is the base class from which each database driver class extends

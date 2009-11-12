@@ -32,22 +32,22 @@
 $ERRORS = array();
 $max_items_per_page = 15;
 
+$uri->name(array("thread_id", "page"));
 // Handle the page ID for slicing and dicing the inventory up.
-$page_id = stripinput($_REQUEST['page']);
-if($page_id == null || $page_id <= 0)
+
+$page_id = stripinput($_URI['page']);
+if($page_id == null || $page_id <= 0 || $page_id == "")
 {
     $page_id = 1;
 }
-
 // Where do we slice the record set?
 $start = (($page_id - 1) * $max_items_per_page);
 $end = (($page_id - 1) * $max_items_per_page) + $max_items_per_page;
 
 // Load the board.
-$thread_id = stripinput($_REQUEST['thread_id']);
+$thread_id = stripinput($_URI['thread_id']);
 $thread = new BoardThread($db);
 $thread = $thread->findOneByBoardThreadId($thread_id);
-
 if($thread == null)
 {
     $ERRORS[] = 'Invalid thread specified.';
@@ -132,7 +132,7 @@ else
         }
         else
         {
-            $ADMIN_ACTIONS['lock'] = 'Unock Thread'; 
+            $ADMIN_ACTIONS['lock'] = 'Unlock Thread'; 
         }
          
         if($thread->getStickied() == 0)

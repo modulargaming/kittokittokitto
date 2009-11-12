@@ -44,10 +44,12 @@ $max_threads_per_page = 15;
 // It is used to determine whether or not to show a link to 
 // the thread's last page.
 $max_posts_per_page = 15; 
+//name uris
+$uri->name(array("board_id", "page"));
 
 // Handle the page ID for slicing and dicing the inventory up.
-$page_id = stripinput($_REQUEST['page']);
-if($page_id == null || $page_id <= 0)
+$page_id = stripinput($_URI['page']);
+if($page_id == null || $page_id <= 0 || $page_id == "")
 {
     $page_id = 1;
 }
@@ -57,7 +59,7 @@ $start = (($page_id - 1) * $max_threads_per_page);
 $end = (($page_id - 1) * $max_threads_per_page) + $max_threads_per_page;
 
 // Load the board.
-$board_id = stripinput($_REQUEST['board_id']);
+$board_id = stripinput($_URI['board_id']);
 $board = new Board($db);
 $board = $board->findOneByBoardId($board_id);
 

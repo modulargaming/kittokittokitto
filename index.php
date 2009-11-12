@@ -27,27 +27,49 @@
  * @package KittoKittoKitto
  * @subpackage Core
  * @version 1.0.0
+ * ------------------------------------------------------+
+ * Additions                                             +
+ * ------------------------------------------------------+
+ *  Added support for URI's 
+ * @author zenk0 <thorpion.zenk0@gmail.com>
+ * @copyright zenk0, modular gaming, Nov 2008
+ * @license http://www.gnu.org/licenses/gpl-3.0.txt GPLv3
+ * @package KittoKittoKitto
+ * @subpackage Core
+ * @version 1.1.0 
  **/
 
 session_start();
 ob_start();
 
+//check to see if install file still exists before loading page
+//used for new copys, to save on the error messages
+$filename = 'install/install.php';
+if (file_exists($filename)) {
+    echo "<a href='install/index.php'>Install Modular Gaming</a>";
+die;
+}
+
+ 
 /**
  * Provides $User, $logged_in, $access_level, etc.
  **/
+require('includes/functions.inc.php');
 require('includes/main.inc.php');
+require('includes/meta/uri.class.php');
 
-// Load page info.
-if($_REQUEST['page_slug'] == null)
-{
-	$_REQUEST['page_slug'] = 'home';
+// Load page info and URI.
+$uri = new Uri($db);
+$uri->build();
+
+if(empty($_URI['slug']) || $_URI['slug'] == null){
+  $_URI['slug'] = "home";
 }
-$slug = stripinput($_REQUEST['page_slug']);
+$slug = stripinput($_URI['slug']);
 
 $jump_page = new JumpPage($db);
 $jump_page = $jump_page->findOneByPageSlug($slug);
 // Done loading page info.
-
 /*
 * =========================
 * ==== Ghettocron v3.0 ====
@@ -74,10 +96,7 @@ foreach(Cronjob::listPendingJobs($db) as $job)
 // Display page.
 if(is_a($jump_page,'JumpPage') == false)
 {
-	header("HTTP/1.1 404 Not Found");
-    $renderer->display('http/404.tpl');
-
-    die();
+	$uri->error("404");
 }
 else
 {
@@ -114,6 +133,7 @@ else
     if(is_object($User) == true)
     {
         $notice = $User->grabNotification('ORDER BY notification_datetime DESC');
+
         if($notice != null)
         {
             $NOTICE = array(
@@ -129,6 +149,19 @@ else
         {
             $renderer->assign('show_admin_panel',true);
         }
+
+	/**
+	  * Check if logged on user has a char and pass the id to header
+	**/
+	$active_char_id = $User->getActiveCharId();
+    	if($active_char_id != 0)
+    	{
+    		$active_char = new Char($db);
+    		$active_char = $active_char->findOneByCharId($active_char_id);
+		$renderer->assign('active_char',$active_char);
+    	}
+
+        require('scripts/randomevents/switch.php');
     } // end user exists
    
     // The list of Spry widgets to load.
@@ -138,27 +171,37 @@ else
         'selectvalidation/SpryValidationSelect.js',
         'textareavalidation/SpryValidationTextarea.js',
         'checkboxvalidation/SpryValidationCheckbox.js',
+	'passwordvalidation/SpryValidationPassword.js',
+	'confirmvalidation/SpryValidationConfirm.js',
     );
     $spry['css'] = array(
         'textfieldvalidation/SpryValidationTextField.css',
         'selectvalidation/SpryValidationSelect.css',
         'textareavalidation/SpryValidationTextarea.css',
         'checkboxvalidation/SpryValidationCheckbox.css',
-    );
+	'passwordvalidation/SpryValidationPassword.css',
+	'confirmvalidation/SpryValidationConfirm.css',
+   );
     $renderer->assign('spry',$spry);
 
     // Get the number of users online for showing somewheres in the layout.
     $online_users = UserOnline::totalUsers($db);
+    
     $renderer->assign('online_users',$online_users);
     
-	$renderer->display("layout/{$jump_page->getLayoutType()}/header.tpl");
+if($jump_page->getShowLayout() == 'Y')
+
+    {
+
+    $renderer->display("layout/{$jump_page->getLayoutType()}/header.tpl");
+
+    }
 
 	if($jump_page->hasAccess($User) == false)
 	{
 		if($access_level == 'banned')
 		{
-            header("HTTP/1.1 403 Forbidden");
-            $renderer->display('http/403_banned.tpl');
+            $uri->error("banned");
 		}
 		elseif($access_level == 'public' && $jump_page->getAccessLevel() == 'user')
 		{
@@ -166,8 +209,7 @@ else
 		} // end unregister'd trying to hit page needing registration.
 		else
 		{
-            header("HTTP/1.1 403 Forbidden");
-            $renderer->display('http/403.tpl');
+            $uri->error("403");
 		} // end user trying to hit mod page
 	} // end no access
 	else
@@ -175,8 +217,14 @@ else
 		include('scripts/'.$jump_page->getPhpScript());
 	} // end include script
 
-	$renderer->display("layout/{$jump_page->getLayoutType()}/footer.tpl");
-} // end else-page found
+if($jump_page->getShowLayout() == 'Y')
 
+    {
+
+        $renderer->display("layout/{$jump_page->getLayoutType()}/footer.tpl");
+
+    }
+
+} // end else-page found
 $db->disconnect();
 ?>

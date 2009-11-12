@@ -28,9 +28,16 @@
  * @subpackage Board
  * @version 1.0.0
  **/
+$uri->name(array("post_id", "page"));
 
-$post_id = stripinput($_REQUEST['post_id']);
-$page = stripinput($_REQUEST['page']);
+$post_id = stripinput($_URI['post_id']);
+
+if ($post_id == null)
+{
+	$post_id = stripinput($_POST['post_id']);
+}
+
+$page = stripinput($_URI['page']);
 
 $post = new BoardPost($db);
 $post = $post->findOneByBoardThreadPostId($post_id);

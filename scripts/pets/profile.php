@@ -28,8 +28,9 @@
  * @subpackage Pets
  * @version 1.0.0
  **/
-
-$pet_id = stripinput($_REQUEST['pet_id']);
+ 
+$uri->name(array("pet_id"));
+$pet_id = stripinput($_URI['pet_id']);
 
 $pet = new Pet($db);
 $pet = $pet->findOneByUserPetId($pet_id);

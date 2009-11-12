@@ -74,7 +74,7 @@ else
             $SHOP = array(
                 'name' => trim(stripinput($_POST['shop']['name'])),
                 'image' => trim(stripinput($_POST['shop']['image'])),
-                'welcome_text' => trim(stripinput($_POST['shop']['welcome_text'])),
+                'welcome_text' => trim(clean_xhtml($_POST['shop']['welcome_text'])),
             );
             
             // If the group could not be loaded, start making a new one.

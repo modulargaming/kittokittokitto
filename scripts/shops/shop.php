@@ -30,7 +30,9 @@
  **/
 
 $ERRORS = array();
-$id = stripinput($_REQUEST['shop_id']);
+
+$uri->name(array("shop_id"));
+$id = stripinput($_URI['shop_id']);
 
 $shop = new Shop($db);
 $shop = $shop->findOneByShopId($id);
@@ -121,16 +123,28 @@ else
                     $stock->destroy();
                     $ERRORS[] = 'That item is not in stock.';
                 } // end odd case
-            } // end stock entry exists
 
-            if($stock->getQuantity() < $quantity)
-            {
-                $ERRORS[] = "The shop does not have that many <strong>{$stock->getItemName()}</strong> in stock.";
-            }
-            elseif(($stock->getPrice() * $quantity) > $User->getCurrency())
-            {
-                $ERRORS[] = 'You cannot afford that purchase.';
-            }
+                if($stock->getQuantity() < $quantity)
+                {
+                    $ERRORS[] = "The shop does not have that many <strong>{$stock->getItemName()}</strong> in stock.";
+                }
+                elseif(($stock->getPrice() * $quantity) > $User->getCurrency())
+                {
+                    $ERRORS[] = 'You cannot afford that purchase.';
+                }
+                
+                if($stock->getUniqueItem() == 'Y')
+                {
+                    if($User->hasItem($stock->getItemTypeId()) == true)
+                    {
+                        $ERRORS[] = 'This is a unique item that you already have.';
+                    }
+                    elseif($quantity > 1)
+                    {
+                        $ERRORS[] = 'You can only have one of this item.';
+                    }
+                } // end unique item checks
+            } // end stock entry exists
 
             if(sizeof($ERRORS) > 0)
             {
@@ -143,23 +157,9 @@ else
                 $User->subtractCurrency($total);
                 
                 // Try and find a stack of this item in the user's inventory.
-                $item = new Item($db);
-                $item = $item->findOneBy(array(
-                    'user_id' => $User->getUserId(),
-                    'item_type_id' => $stock->getItemTypeId(),
-                ));
+                $item = Item::stackFactory($User->getUserId(),$stock->getItemTypeId(),$db);
+                $item->updateQuantity(($item->getQuantity() + $quantity));
 
-                // If the user has none, create a new stack.
-                if($item == null)
-                {
-                    $item = new Item($db);
-                    $item->setUserId($User->getUserId());
-                    $item->setItemTypeId($stock->getItemTypeId());
-                } // end make new stack
-                
-                $item->setQuantity(($item->getQuantity() + $quantity));
-                $item->save();
-                
                 // Remove the stock from the shope.
                 $item_name = $stock->getItemName(); // store this for later.
                 $stock->sell($quantity);

@@ -29,6 +29,21 @@
  * @version 1.0.0
  **/
 
+$settings = new Settings($db);
+$settings = $settings->findOneById($APP_CONFIG['settings_row']);
+$SETTINGS = array(
+	'start_currency' => $settings->getStartCurrency(),
+	'enable_register' => $settings->getEnableRegister(),
+);
+
+if ($SETTINGS['enable_register'] == '0')
+{
+	$ERRORS = array();
+	
+	$ERRORS[] = 'Registrations are curently turned of, please come back later';
+	draw_errors($ERRORS);
+} else {
+
 $GENDER = array(
     'male' => 'Male',
     'female' => 'Female',
@@ -44,8 +59,14 @@ switch($_REQUEST['state'])
 {
 	default:
 	{
+        $uri->name(array("ref_id"));
+        if(!empty($_URI['ref_id'])){
+          $reffy = new User($db);
+          $reffy = $reffy->findOneByUserId($_URI['ref_id']);
+          $ref = $reffy->getUserName();
+        }
         array_unshift($GENDER,'Select one...');
-        
+        $renderer->assign("ref", $ref);
         $renderer->assign('genders',$GENDER);
         $renderer->assign('ages',$AGE);
 		$renderer->display('user/register_form.tpl');
@@ -68,10 +89,11 @@ switch($_REQUEST['state'])
 				
 		$USER = array(
 			'user_name' => stripinput($_POST['user']['user_name']),
-			'password' => $_POST['user']['password'], // Don't care about shit in here - the md5sum is what hits the db.
-            'email' => stripinput($_POST['user']['email']),
-            'age' => stripinput($_POST['user']['age']),
-            'gender' => stripinput($_POST['user']['gender']),
+			'password' => $_POST['user']['password'], // Don't care about anything in here - the md5sum is what hits the db.
+            		'email' => stripinput($_POST['user']['email']),
+            		'age' => stripinput($_POST['user']['age']),
+            		'gender' => stripinput($_POST['user']['gender']),
+			'ref_id' => stripinput($_POST['user']['ref_id']),
 		);
 		
 		if($USER['user_name'] == null)
@@ -137,23 +159,40 @@ switch($_REQUEST['state'])
 			$new_user->setUserName($USER['user_name']);
 			$new_user->setRegisteredIpAddr($_SERVER['REMOTE_ADDR']);
 			$new_user->setPassword($USER['password']);
-            $new_user->setCurrentSaltExpiration($new_user->sysdate());
-            $new_user->setLastActivity($new_user->sysdate());
+            		$new_user->setCurrentSaltExpiration($new_user->sysdate());
+            		$new_user->setLastActivity($new_user->sysdate());
 			$new_user->setAccessLevel('user');
-            $new_user->setEmail($USER['email']);
-            $new_user->setAge($USER['age']);
-            $new_user->setGender($USER['gender']);
-            $new_user->setProfile($USER['profile']);
-            $new_user->setCurrency($APP_CONFIG['starting_funds']);
-            $new_user->setUserTitle('User');
-            $new_user->setTextareaPreference('tinymce');
-            $new_user->setDatetimeCreated($new_user->sysdate());
-            $new_user->setDatetimeLastPost($new_user->sysdate());
-            $new_user->setPasswordResetRequested($new_user->sysdate());
-            $new_user->setTimezoneId(54); // 54 = UTC
-            $new_user->setDatetimeFormatId(1); // Y-m-d H:i:s
-            $new_user->setShowOnlineStatus('Y');
+            		$new_user->setEmail($USER['email']);
+            		$new_user->setAge($USER['age']);
+            		$new_user->setGender($USER['gender']);
+            		$new_user->setProfile($USER['profile']);
+			$new_user->setCurrency($SETTINGS['start_currency']);
+            		$new_user->setUserTitle('User');
+            		$new_user->setTextareaPreference('tinymce');
+            		$new_user->setDatetimeCreated($new_user->sysdate());
+            		$new_user->setDatetimeLastPost($new_user->sysdate());
+            		$new_user->setPasswordResetRequested($new_user->sysdate());
+            		$new_user->setTimezoneId(54); // 54 = UTC
+            		$new_user->setDatetimeFormatId(1); // Y-m-d H:i:s
+            		$new_user->setShowOnlineStatus('Y');
+			$new_user->setRefby($USER['ref_id']);
 			$new_user->save();
+
+			if ($USER['ref_id'] == null) {
+			} else {
+
+				$Ref_id = $USER['ref_id'];
+				$refto = new User($db);
+				$refto = $refto->findOneByUserName($Ref_id);
+				
+				if($refto != null){
+					$refs = $refto->getRef();
+					$refs++;
+					$refto->setRef($refs);
+					$refto->save();
+				}
+			}
+
 			
 			// Log the user in and send him back home.
 			$new_user->login();
@@ -163,5 +202,5 @@ switch($_REQUEST['state'])
 		break;
 	} // end process
 } // end switch
-
+} //end turn on/ off registrations
 ?>

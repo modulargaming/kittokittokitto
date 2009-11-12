@@ -28,9 +28,9 @@
  * @subpackage Board
  * @version 1.0.0
  **/
-
-$thread_id = stripinput($_REQUEST['thread_id']);
-$page = stripinput($_REQUEST['page']);
+$uri->name(array("thread_id", "page"));
+$thread_id = stripinput($_URI['thread_id']);
+$page = stripinput($_URI['page']);
 
 $thread = new BoardThread($db);
 $thread = $thread->findOneByBoardThreadId($thread_id);

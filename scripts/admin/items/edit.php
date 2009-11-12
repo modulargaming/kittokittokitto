@@ -33,6 +33,7 @@ $ERRORS = array();
 $item_id = (int)stripinput($_REQUEST['item']['id']);
 $item = new ItemType($db);
 $item = $item->findOneByItemTypeId($item_id);
+$YN = array('Y' => 'Yes','N' => 'No');
 
 if($item == null)
 {
@@ -52,20 +53,42 @@ else
             if($item != null)
             {
                 $ITEM = array(
+                    'show_edit_materials' => $item->hasMaterials(),
                     'id' => $item->getItemTypeId(),
                     'type' => $item->getClassDescr(),
                     'name' => $item->getItemName(),
                     'image' => $item->getItemImage(),
                     'description' => $item->getItemDescr(),
+                    'unique' => $item->getUniqueItem(),
+                    'transferable' => $item->getTransferableItem(),
                 );
             } // end edit mode
 
             $fields = $item->listAttributes();
             foreach($fields as $field)
             {
+                // This prepopulates the item name in the search field.
+                $item_tmp = null;
+                if($field['type'] == 'item') 
+                {
+                    $item_tmp = new ItemType($db);
+                    $item_tmp = $item_tmp->findOneByItemTypeId($item->get($field['name']));
+                    
+                    $value = array($item->get($field['name']),); 
+                    if($item_tmp != null)
+                    {
+                        $value[] = $item_tmp->getItemName(); 
+                    }
+                    
+                    $ITEM[$field['name']] = $value;
+                    continue;
+                } // end item specific
+
                 $ITEM[$field['name']] = $item->get($field['name']);
-            }
+            } // end extra field loop
             
+            $YN = array_merge(array('' => 'Select one...'),$YN);
+            $renderer->assign('yes_no',$YN);
             $renderer->assign('extra_fields',$fields);
             $renderer->assign('item',$ITEM);
             $renderer->display('admin/items/edit.tpl');
@@ -79,6 +102,8 @@ else
                 'name' => trim(stripinput($_POST['item']['name'])),
                 'image' => trim(stripinput($_POST['item']['image'])),
                 'description' => trim(clean_xhtml($_POST['item']['description'],false)),
+                'transferable' => $_POST['item_transferable'],
+                'unique' => $_POST['item_unique'],
             );
             
             // Load the data for extra, item-specific fields.
@@ -123,6 +148,16 @@ else
                 $ERRORS[] = 'No description specified.';
             }
 
+            if(in_array($ITEM['unique'],array_keys($YN)) == false)
+            {
+                $ERRORS[] = 'Item uniqueness not specified.';
+            }
+            
+            if(in_array($ITEM['transferable'],array_keys($YN)) == false)
+            {
+                $ERRORS[] = 'Item transerability not specified.';
+            }
+
             if(sizeof($ERRORS) > 0)
             {
                 draw_errors($ERRORS);
@@ -132,7 +167,9 @@ else
                 $item->setItemName($ITEM['name']);
                 $item->setItemImage($ITEM['image']);
                 $item->setItemDescr($ITEM['description']);
-                
+                $item->setUniqueItem($ITEM['unique']);
+                $item->setTransferableItem($ITEM['transferable']);
+
                 // Do the extra fields.
                 foreach($EXTRA as $column => $value)
                 {

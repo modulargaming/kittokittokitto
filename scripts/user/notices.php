@@ -28,8 +28,8 @@
  * @subpackage Core
  * @version 1.0.0
  **/
-
-switch($_REQUEST['state'])
+$uri->name(array("state", "id"));
+switch($_URI['state'])
 {
     default:
     {
@@ -59,7 +59,7 @@ switch($_REQUEST['state'])
 
     case 'jump':
     {
-        $notice_id = stripinput($_REQUEST['notification_id']);
+        $notice_id = stripinput($_URI['id']);
         
         $notice = new Notification($db);
         $notice = $notice->findOneBy(array(

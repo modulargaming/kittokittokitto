@@ -53,6 +53,8 @@ require('user/staff_group.class.php');
 require('user/staff_permission.class.php');
 require('user/staff_group_staff_permission.class.php');
 require('user/user_online.class.php');
+require('user/explore.class.php');
+require('user/template.class.php');
 
 /**
  * Pet-related classes.
@@ -71,6 +73,10 @@ require('item/item.class.php');
 require('item/food_item.class.php');
 require('item/toy_item.class.php');
 require('item/paint_item.class.php');
+require('item/item_recipe_type.class.php');
+require('item/recipe_item.class.php');
+require('item/recipe_material.class.php');
+
 
 /**
  * Shop-related classes.
@@ -92,5 +98,38 @@ require('news.class.php');
  * The ghettocron subsystem.
  **/
 require('cronjob.class.php');
+
+/**
+ * Clan subsystem
+**/
+require('clan/clan.class.php');
+
+/**
+ * Character/RPG-related classes.
+**/
+require('char/char.class.php');
+require('char/char_race.class.php');
+
+/**
+ * Chat classes
+**/
+require ('chat/chat.class.php');
+
+/**
+ * Settings classes
+**/
+require ('settings/settings.class.php');
+
+/**
+ * City classes
+**/
+require ('city/city.class.php');
+
+/**
+ * User Shop classes
+**/
+require ('usershops/shop.class.php');
+require ('usershops/shop_history.class.php');
+require ('usershops/shop_inventory.class.php');
 
 ?>

@@ -55,6 +55,7 @@ switch($_REQUEST['state'])
             'timezone_id' => $User->getTimezoneId(),
             'datetime_format_id' => $User->getDatetimeFormatId(),
             'show_online_status' => $User->getShowOnlineStatus(),
+        	'template' => $User->getTemplate(),
         );
 
         // If someone hit here with defaults from the back button,
@@ -107,10 +108,19 @@ switch($_REQUEST['state'])
             $renderer->assign('notice',$_SESSION['pref_notice']);
             unset($_SESSION['pref_notice']);
         }
-
+        
+        //Build Lisy for Templaye
+        $TEMPLATES2 = array();
+        $templates = new Template($db);
+        $templates = $templates->findBy(array());
+        foreach($templates as $template)
+        {
+            $TEMPLATES2[$template->getFolder()] = $template->getName();
+        } // end timezone loop
         $renderer->assign('online_status',$Y_N); 
         $renderer->assign('avatars',$AVATARS);
         $renderer->assign('timezones',$TIMEZONES);
+        $renderer->assign('template',$TEMPLATES2);
         $renderer->assign('datetime_formats',$DATETIME_FORMATS);
         $renderer->assign('genders',$GENDER);
         $renderer->assign('ages',$AGE);
@@ -185,6 +195,7 @@ switch($_REQUEST['state'])
             'datetime_format' => stripinput($_POST['user']['datetime_format']),
             'timezone' => stripinput($_POST['user']['timezone']),
             'show_online_status' => stripinput($_POST['user']['show_online_status']),
+        	'template' => stripinput($_POST['user']['template']),
         );
         
         if(in_array($USER['gender'],array_keys($GENDER)) == false)
@@ -237,6 +248,14 @@ switch($_REQUEST['state'])
             $ERRORS[] = 'Invalid timezone specified.';
         }
         
+    	$template = new template($db);
+        $template = $template->findOneByFolder($USER['template']);
+
+        if($template == null)
+        {
+            $ERRORS[] = 'Invalid Template specified.';
+        }
+        
         if(in_array($USER['show_online_status'],array_keys($Y_N)) == false)
         {
             $ERRORS[] = 'Invalid value selected for Show Online Status.';
@@ -260,6 +279,7 @@ switch($_REQUEST['state'])
             $User->setDatetimeFormatId($datetime_format->getDatetimeFormatId());
             $User->setTimezoneId($timezone->getTimezoneId());
             $User->setShowOnlineStatus($USER['show_online_status']);
+            $User->setTemplate($USER['template']);
             $User->save();
             
             $_SESSION['pref_notice'] = 'Your preferences have been updated.';

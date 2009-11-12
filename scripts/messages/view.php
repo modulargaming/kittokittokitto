@@ -30,7 +30,8 @@
  **/
 
 $ERRORS = array();
-$message_id = stripinput($_REQUEST['message_id']);
+$uri->name(array("message_id"));
+$message_id = stripinput($_URI['message_id']);
 $message = new Message($db);
 $message = $message->findOneByUserMessageId($message_id);
 

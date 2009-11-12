@@ -50,7 +50,8 @@ switch($_SERVER['RELEASE_MODE'])
         // force PHP to send errors to the browser. This is immensely useful
         // during setup / development, but it's probably not wanted in a 
         // production environment.
-        error_reporting(E_ALL ^ E_NOTICE);
+		error_reporting(E_ALL ^ E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE | E_STRICT);
 
         // Make the errors useful for dev.
         set_exception_handler('development_exception_handler');
@@ -69,77 +70,88 @@ switch($_SERVER['RELEASE_MODE'])
              * @var array
              **/
 			'db_dsn' => array(
-				'phptype' => 'pgsql', // Oracle = oci, Postgres = pgsql.
-				'username' => 'kitto',
-				'password' => 'k1tt0',
+				'phptype' => 'mysql', // Oracle = oci, Postgres = pgsql.
+				'username' => 'database_user',
+				'password' => 'database_user_password',
 				'hostspec' => 'localhost',
-				'database' => 'kitto',
+				'database' => 'database_name',
 			),
             
+			/**
+             * The prefix of mgs Tables
+             * Example:  mg_ 
+             **/
+            'prefix' => 'mg_',
+			
             /**
              * The administator's e-mail address. Password recovery notices
              * come from this address, too!
              **/
-            'administrator_email' => 'owlmanatt@gmail.com',
+            'administrator_email' => 'admin@yourdomain.com',
+            'paypal_email' => 'admin@yourdomain.com',
             
             /**
              * The absolute path (on the filesystem) to your app. On UNIX,
              * this should look like /something/something/something.
              *
-             * If you don't know what this should be, put a file calling
-             * phpinfo() into the folder you want KKK to live in and visit
-             * it in your browser. Look for the 'SCRIPT_FILENAME' field.
-             * The base path is everything *except* for the filename.
+	     * Consult your system_check.php file for this path. 
              **/
-			'base_path' => '/var/www/kitto',
+			'base_path' => '/home/user/public_html',
             
             /**
              * The path to the root of your Smarty template directory.
              * The templates/, templates_c/, cache/, and configs/ folders
              * live in here.
              **/
-			'template_path' => '/var/www/kitto/template',
+			'template_path' => '/home/user/public_html/template',
 
             /**
              * The HTMLPurifier cache must be writable by the webserver's user.
              * Set this to null to disable the cache (but you *want* the cache
              * for performance reasons!). Oh, and no trailing slash.
              **/
-            'htmlpurifier_cachedir' => '/var/www/kitto/cache',
+            'htmlpurifier_cachedir' => '/home/user/public_html/cache',
 
             /*
              * The full URL (no trailing slash) to your site.
-             * ie, 'http://demo.kittokittokitto.yasashiisyndicate.org'
+             * ie, 'http://demo.modulargaming.com'
              **/
-			'public_dir' => 'http://bell.owl.ys/kitto',
+			'public_dir' => 'http://modulargaming.com',
             
+			/*
+             * Standard template that will be used if the 
+             * user has not picked one.
+             * ie, 'mg'
+             **/
+			'default_template' => 'mg',
+			
             /**
              * If you have many sites at this domain, a cookie prefix
              * is good to ensure there's no overlap between your various
              * apps' cookies.
              **/
-			'cookie_prefix' => 'kkk_',
+			'cookie_prefix' => 'mg_',
 
             /**
              * The name of your site.
              **/
-            'site_name' => 'KittoKittoKitto',
+            'site_name' => 'Modular Gaming',
 
             /**
              * The name of your site's currency.
              **/
-            'currency_name_singular' => 'Gold',
-            'currency_name_plural' => 'Golds',
-
-            /**
-             * How much money should the user start out with?
-             **/
-            'starting_funds' => 500,
+            'currency_name_singular' => 'Credit',
+            'currency_name_plural' => 'Credits',
 
             /**
              * The maximum number of pets a single user may have.
              **/
             'max_pets' => 2,
+
+            /**
+             * The maximum number of pets a single user may have.
+             **/
+            'max_chars' => 2,
 
             /**
              * The number of seconds a user must wait between creating posts
@@ -162,6 +174,14 @@ switch($_SERVER['RELEASE_MODE'])
              * your compose page be inconsistant with reality!
              **/
             'max_mail_recipients' => 5,
+			
+			/**
+             * The id of the row where settings should be loaded from
+             *
+             * WARNING: If you want to change this, you must have a new row in
+             * the database table called settings
+             **/
+			'settings_row' => 1,
 		);
 		
 		break;
@@ -185,12 +205,17 @@ ini_set('include_path',ini_get('include_path').':./external_lib/');
  * otherwise they will cause a fatal error because their parent class is
  * undefined.
  **/
-require_once('external_lib/DB.php');
+//This will check if you are running windows or another os 
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    require_once($APP_CONFIG['base_path'].'\external_lib/DB.php');
+} else {
+    require_once('external_lib/DB.php');
+}
 require_once('external_lib/Log.php');
 require_once('external_lib/aphp/aphp.php');
 
 /**
- * KKK library files.
+ * Modular Gaming library files.
  **/
 require('includes/meta/macros.lib.php');
 require('includes/meta/jump_page.class.php');

@@ -71,6 +71,10 @@ switch($_REQUEST['state'])
         {
             draw_errors('You have to pick a card.');
         }
+
+	if($User->getCurrency()<50){
+	   draw_errors('You have to have enough money to play!');
+	}
         else
         {
             $random = array_rand($CARDS);

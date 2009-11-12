@@ -38,6 +38,8 @@ $LINKS = array(
     'admin-boards' => array('manage_boards','Manage Boards'),
     'admin-shops' => array('manage_shops','Manage Shops'),
     'admin-items' => array('manage_items','Manage Items'),
+	'admin-settings' => array('manage_settings','Manage Settings'),
+	'admin-jump' => array('manage_settings','Manage Jump Pages'),
 );
 
 $SHOW = array();

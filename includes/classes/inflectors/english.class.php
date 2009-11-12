@@ -1,74 +1,75 @@
 <?php
 /**
- * Pluralize and singularize English words.
- *
- * Taken from CakePHP. 
- *
- * CakePHP(tm) :  Rapid Development Framework <http://www.cakephp.org/>
- * Copyright 2005-2007, Cake Software Foundation, Inc.
- *								1785 E. Sahara Avenue, Suite 490-204
- *								Las Vegas, Nevada 89104
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * SVN FILE: $Id: inflector.php 5811 2007-10-20 06:39:14Z phpnut $
- *
- * @filesource
- * @copyright		Copyright 2005-2007, Cake Software Foundation, Inc.
- * @link				http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
- * @package		    KittoKittoKitto	
- * @subpackage		Core
- * @version			$Revision: 5811 $
- * @modifiedby		$LastChangedBy: phpnut $
- * @lastmodified	$Date: 2007-10-20 01:39:14 -0500 (Sat, 20 Oct 2007) $
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
- **/
-
+* Pluralize and singularize English words.
+*
+* Taken from CakePHP.
+*
+* CakePHP(tm) : Rapid Development Framework <http://www.cakephp.org/>
+* Copyright 2005-2007, Cake Software Foundation, Inc.
+*                1785 E. Sahara Avenue, Suite 490-204
+*                Las Vegas, Nevada 89104
+*
+* Licensed under The MIT License
+* Redistributions of files must retain the above copyright notice.
+*
+* SVN FILE: $Id: inflector.php 5811 2007-10-20 06:39:14Z phpnut $
+*
+* @filesource
+* @copyright    Copyright 2005-2007, Cake Software Foundation, Inc.
+* @link        http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
+* @package     KittoKittoKitto  
+* @subpackage    Core
+* @version      $Revision: 5811 $
+* @modifiedby    $LastChangedBy: phpnut $
+* @lastmodified  $Date: 2007-10-20 01:39:14 -0500 (Sat, 20 Oct 2007) $
+* @license      http://www.opensource.org/licenses/mit-license.php The MIT License
+**/
+ 
 /**
- * Pluralize and singularize English words.
- *
- * Inflector pluralizes and singularizes English nouns.
- * Used by Cake's naming conventions throughout the framework.
- * Test with $i = new Inflector(); $i->test();
- *
- * @package	KittoKittoKitto	
- * @subpackage Core
- **/
+* Pluralize and singularize English words.
+*
+* Inflector pluralizes and singularizes English nouns.
+* Used by Cake's naming conventions throughout the framework.
+* Test with $i = new Inflector(); $i->test();
+*
+* @package  KittoKittoKitto  
+* @subpackage Core
+**/
 class English_Inflector
 {
     /**
-     * Gets a reference to the Inflector object instance
-     *
-     * @return object
-     **/
-    public function &getInstance() 
+* Gets a reference to the Inflector object instance
+*
+* @return object
+**/
+    public function &getInstance()
     {
         static $instance = array();
-
-        if(!isset($instance[0]) || !$instance[0]) 
+ 
+        if(!isset($instance[0]) || !$instance[0])
         {
             $instance[0] =& new English_Inflector();
         }
-
+ 
         return $instance[0];
     } // end getInstance
     
     /**
-     * Initializes plural inflection rules
-     *
-     * @return void
-     **/
-	private function __initPluralRules() 
+* Initializes plural inflection rules
+*
+* @return void
+**/
+  private function __initPluralRules()
     {
-		$_this =& English_Inflector::getInstance();
-
-		$corePluralRules = array(
+    $_this =& English_Inflector::getInstance();
+ 
+    $corePluralRules = array(
+            '/([bcdfghjklmnpqrstvwxyz])o$/i' => '\1oes', // heroes, potatoes
             '/(s)tatus$/i' => '\1\2tatuses',
             '/(quiz)$/i' => '\1zes',
             '/^(ox)$/i' => '\1\2en', // ox
             '/([m|l])ouse$/i' => '\1ice', // mouse, louse
-            '/(matr|vert|ind)(ix|ex)$/i'  => '\1ices', // matrix, vertex, index
+            '/(matr|vert|ind)(ix|ex)$/i' => '\1ices', // matrix, vertex, index
             '/(x|ch|ss|sh)$/i' => '\1es', // search, switch, fix, box, process, address
             '/([^aeiouy]|qu)y$/i' => '\1ies', // query, ability, agency
             '/(hive)$/i' => '\1s', // archive, hive
@@ -83,11 +84,11 @@ class English_Inflector
             '/(alias)$/i' => '\1es', // alias
             '/(octop|vir)us$/i' => '\1i', // octopus, virus - virus has no defined plural (according to Latin/dictionary.com), but viri is better than viruses/viruss
             '/(ax|cri|test)is$/i' => '\1es', // axis, crisis
-            '/s$/' => 's',  // no change (compatibility)
+            '/s$/' => 's', // no change (compatibility)
             '/$/' => 's',
         );
-
-		$coreUninflectedPlural = array(
+ 
+    $coreUninflectedPlural = array(
             '.*[nrlm]ese',
             '.*deer',
             '.*fish',
@@ -174,9 +175,12 @@ class English_Inflector
             'whiting',
             'wildebeest',
             'Yengeese',
+            'meat',
+            'fruit',
+            'cheese',
         );
-
-		$coreIrregularPlural = array(
+ 
+    $coreIrregularPlural = array(
             'atlas' => 'atlases',
             'beef' => 'beefs',
             'brother' => 'brothers',
@@ -207,30 +211,30 @@ class English_Inflector
             'trilby' => 'trilbys',
             'turf' => 'turfs',
         );
-
-		$pluralRules = $corePluralRules;
-		$uninflected = $coreUninflectedPlural;
-		$irregular = $coreIrregularPlural;
-
-		$_this->pluralRules = array(
+ 
+    $pluralRules = $corePluralRules;
+    $uninflected = $coreUninflectedPlural;
+    $irregular = $coreIrregularPlural;
+ 
+    $_this->pluralRules = array(
             'pluralRules' => $pluralRules,
             'uninflected' => $uninflected,
             'irregular' => $irregular
         );
-
-		$_this->pluralized = array();
-	} // end __initPluralRules
-
+ 
+    $_this->pluralized = array();
+  } // end __initPluralRules
+ 
     /**
-     * Initializes singular inflection rules
-     *
-     * @return void
-     */
-    private function __initSingularRules() 
+* Initializes singular inflection rules
+*
+* @return void
+*/
+    private function __initSingularRules()
     {
-		$_this =& English_Inflector::getInstance();
-
-		$coreSingularRules = array(
+    $_this =& English_Inflector::getInstance();
+ 
+    $coreSingularRules = array(
             '/(s)tatuses$/i' => '\1\2tatus',
             '/^(.*)(menu)s$/i' => '\1\2',
             '/(quiz)zes$/i' => '\\1',
@@ -264,8 +268,8 @@ class English_Inflector
             '/^(.*us)$/' => '\\1',
             '/s$/i' => ''
         );
-
-		$coreUninflectedSingular = array(
+ 
+    $coreUninflectedSingular = array(
             '.*[nrlm]ese',
             '.*deer',
             '.*fish',
@@ -353,9 +357,12 @@ class English_Inflector
             'whiting',
             'wildebeest',
             'Yengeese',
+            'meat',
+            'fruit',
+            'cheese',
         );
-
-		$coreIrregularSingular = array(
+ 
+    $coreIrregularSingular = array(
             'atlases' => 'atlas',
             'beefs' => 'beef',
             'brothers' => 'brother',
@@ -386,144 +393,167 @@ class English_Inflector
             'trilbys' => 'trilby',
             'turfs' => 'turf',
         );
-
-		$singularRules = $coreSingularRules;
-		$uninflected = $coreUninflectedSingular;
-		$irregular = $coreIrregularSingular;
-
-		$_this->singularRules = array(
+ 
+    $singularRules = $coreSingularRules;
+    $uninflected = $coreUninflectedSingular;
+    $irregular = $coreIrregularSingular;
+ 
+    $_this->singularRules = array(
             'singularRules' => $singularRules,
             'uninflected' => $uninflected,
             'irregular' => $irregular
         );
-
-		$_this->singularized = array();
-	} // end __initSingularRules
-
+ 
+    $_this->singularized = array();
+  } // end __initSingularRules
+ 
     /**
-     * Return $word in plural form.
-     *
-     * @param string $word Word in singular
-     * @return string Word in plural
-     **/
-	static public function pluralize($word) 
+* Return $word in plural form.
+*
+* @param string $word Word in singular
+* @return string Word in plural
+**/
+  static public function pluralize($word)
     {
-		$_this =& English_Inflector::getInstance();
+        $of_pos = stripos($word,' of ');
+        $phrase_post = '';
+        if($of_pos > 0)
+        {
+            $phrase_post = substr($word,$of_pos);
+            $word = substr($word,0,$of_pos);
+        }
+ 
+        // Pluralize $word. An iten name may be a phrase.
+        $last_word_pos = strrpos($word,' ');
+        if($last_word_pos === null)
+        {
+            // word remains untouched, phrase is empty.
+            $phase = '';
+            $phrase_post = '';
+        }
+        else
+        {
+            $phrase = substr($word,0,$last_word_pos).' ';
+            $word = trim(substr($word,$last_word_pos));
+        }
+        // print "Broken: '{$phrase}' '{$word}' '{$phrase_post}'<br />";
+ 
+    $_this =& English_Inflector::getInstance();
         
-		if(!isset($_this->pluralRules) || empty($_this->pluralRules)) 
+    if(!isset($_this->pluralRules) || empty($_this->pluralRules))
         {
-			$_this->__initPluralRules();
-		}
-
-		if (isset($_this->pluralized[$word])) 
+      $_this->__initPluralRules();
+    }
+ 
+    if (isset($_this->pluralized[$word]))
         {
-			return $_this->pluralized[$word];
-		}
-
-		extract($_this->pluralRules);
-		if(!isset($regexUninflected) || !isset($regexIrregular)) 
+      return $phrase.$_this->pluralized[$word].$phrase_post;
+    }
+ 
+    extract($_this->pluralRules);
+    if(!isset($regexUninflected) || !isset($regexIrregular))
         {
-			$regexUninflected = English_Inflector::enclose(join( '|', $uninflected));
-			$regexIrregular = English_Inflector::enclose(join( '|', array_keys($irregular)));
-			$_this->pluralRules['regexUninflected'] = $regexUninflected;
-			$_this->pluralRules['regexIrregular'] = $regexIrregular;
-		}
-
-		if(preg_match('/(.*)\\b(' . $regexIrregular . ')$/i', $word, $regs)) 
+      $regexUninflected = English_Inflector::enclose(join( '|', $uninflected));
+      $regexIrregular = English_Inflector::enclose(join( '|', array_keys($irregular)));
+      $_this->pluralRules['regexUninflected'] = $regexUninflected;
+      $_this->pluralRules['regexIrregular'] = $regexIrregular;
+    }
+ 
+    if(preg_match('/(.*)\\b(' . $regexIrregular . ')$/i', $word, $regs))
         {
-			$_this->pluralized[$word] = $regs[1] . substr($word, 0, 1) . substr($irregular[strtolower($regs[2])], 1);
+      $_this->pluralized[$word] = $regs[1] . substr($word, 0, 1) . substr($irregular[strtolower($regs[2])], 1);
             
-			return $_this->pluralized[$word];
-		}
-
-		if(preg_match('/^(' . $regexUninflected . ')$/i', $word, $regs)) 
+      return $phrase.$_this->pluralized[$word].$phrase_post;
+    }
+ 
+    if(preg_match('/^(' . $regexUninflected . ')$/i', $word, $regs))
         {
-			$_this->pluralized[$word] = $word;
-			return $word;
-		}
-
-		foreach($pluralRules as $rule => $replacement) 
+      $_this->pluralized[$word] = $word;
+      return $phrase.$word.$phrase_post;
+    }
+ 
+    foreach($pluralRules as $rule => $replacement)
         {
-			if(preg_match($rule, $word)) 
+      if(preg_match($rule, $word))
             {
-				$_this->pluralized[$word] = preg_replace($rule, $replacement, $word);
-				return $_this->pluralized[$word];
-			}
-		} // end loop
+        $_this->pluralized[$word] = preg_replace($rule, $replacement, $word);
+        return $phrase.$_this->pluralized[$word].$phrase_post;
+      }
+    } // end loop
         
-		$_this->pluralized[$word] = $word;
-
-		return $word;
-	} // end pluralize
-
+    $_this->pluralized[$word] = $word;
+ 
+    return $phrase.$word.$phrase_post;
+  } // end pluralize
+ 
     /**
-     * Return $word in singular form.
-     *
-     * @param string $word Word in plural
-     * @return string Word in singular
-     **/
-	static public function singularize($word) 
+* Return $word in singular form.
+*
+* @param string $word Word in plural
+* @return string Word in singular
+**/
+  static public function singularize($word)
     {
-		$_this =& English_Inflector::getInstance();
-		
-        if (!isset($_this->singularRules) || empty($_this->singularRules)) 
+    $_this =& English_Inflector::getInstance();
+    
+        if (!isset($_this->singularRules) || empty($_this->singularRules))
         {
-			$_this->__initSingularRules();
-		}
-
-		if (isset($_this->singularized[$word])) 
+      $_this->__initSingularRules();
+    }
+ 
+    if (isset($_this->singularized[$word]))
         {
-			return $_this->singularized[$word];
-		}
-
-		extract($_this->singularRules);
-		
-        if(!isset($regexUninflected) || !isset($regexIrregular)) 
+      return $_this->singularized[$word];
+    }
+ 
+    extract($_this->singularRules);
+    
+        if(!isset($regexUninflected) || !isset($regexIrregular))
         {
-			$regexUninflected = English_Inflector::enclose(join( '|', $uninflected));
-			$regexIrregular = English_Inflector::enclose(join( '|', array_keys($irregular)));
+      $regexUninflected = English_Inflector::enclose(join( '|', $uninflected));
+      $regexIrregular = English_Inflector::enclose(join( '|', array_keys($irregular)));
             $_this->singularRules['regexUninflected'] = $regexUninflected;
-			$_this->singularRules['regexIrregular'] = $regexIrregular;
-		} 
-
-		if(preg_match('/(.*)\\b(' . $regexIrregular . ')$/i', $word, $regs)) 
+      $_this->singularRules['regexIrregular'] = $regexIrregular;
+    }
+ 
+    if(preg_match('/(.*)\\b(' . $regexIrregular . ')$/i', $word, $regs))
         {
-			$_this->singularized[$word] = $regs[1] . substr($word, 0, 1) . substr($irregular[strtolower($regs[2])], 1);
+      $_this->singularized[$word] = $regs[1] . substr($word, 0, 1) . substr($irregular[strtolower($regs[2])], 1);
             
-			return $_this->singularized[$word];
-		}
-
-		if(preg_match('/^(' . $regexUninflected . ')$/i', $word, $regs)) 
+      return $_this->singularized[$word];
+    }
+ 
+    if(preg_match('/^(' . $regexUninflected . ')$/i', $word, $regs))
         {
-			$_this->singularized[$word] = $word;
+      $_this->singularized[$word] = $word;
             
-			return $word;
-		}
-
-		foreach($singularRules as $rule => $replacement) 
+      return $word;
+    }
+ 
+    foreach($singularRules as $rule => $replacement)
         {
-			if (preg_match($rule, $word)) {
-				$_this->singularized[$word] = preg_replace($rule, $replacement, $word);
-				return $_this->singularized[$word];
-			}
-		} // end loop
+      if (preg_match($rule, $word)) {
+        $_this->singularized[$word] = preg_replace($rule, $replacement, $word);
+        return $_this->singularized[$word];
+      }
+    } // end loop
         
-		$_this->singularized[$word] = $word;
+    $_this->singularized[$word] = $word;
         
-		return $word;
-	} // end singularize
-
+    return $word;
+  } // end singularize
+ 
     /**
-     * Enclose a string for preg matching.
-     *
-     * @param string $string String to enclose
-     * @return string Enclosed string
-     */
-    static public function enclose($string) 
+* Enclose a string for preg matching.
+*
+* @param string $string String to enclose
+* @return string Enclosed string
+*/
+    static public function enclose($string)
     {
         return '(?:' . $string . ')';
     } // end __enclose
     
 } // end English_Inflector
-
+ 
 ?>

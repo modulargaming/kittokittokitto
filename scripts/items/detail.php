@@ -36,6 +36,8 @@ switch($_REQUEST['state'])
         $ERRORS = array();
         $id = stripinput($_REQUEST['item']['id']);
 
+
+$item = $item->getByLocation(array("location" => "inventory"));
         $item = Item::factory($id,$db);
         if($item == null)
         {
@@ -62,18 +64,23 @@ switch($_REQUEST['state'])
         } 
         else
         {
+            $ACTIONS = array(
+                 '' => 'Select one...',
+                'use' => 'Use',
+            );
+            if($item->getTransferableItem() == 'Y')
+            {
+                $ACTIONS['give'] = 'Give';
+            }
+            $ACTIONS['destroy'] = 'Destroy';
+
             $DISPLAY = array(
                 'id' => $item->getUserItemId(),
                 'name' => $item->getInflectedItemName(),
                 'quantity' => $item->getQuantity(),
                 'description' => $item->getItemDescr(),
                 'image' => $item->getImageUrl(),
-                'actions' => array(
-                    '' => 'Select one...',
-                    'use' => 'Use',
-                    'give' => 'Give',
-                    'destroy' => 'Destroy',
-                ),
+                'actions' => $ACTIONS,
             );
 
             $renderer->assign('item',$DISPLAY);
@@ -89,6 +96,7 @@ switch($_REQUEST['state'])
         $id = stripinput($_REQUEST['action']['item_id']);
         $quantity = stripinput($_REQUEST['action']['quantity']);
 
+$item = $item->getByLocation(array("location" => "inventory"));
         $item = Item::factory($id,$db);
         if($item == null)
         {
@@ -125,15 +133,27 @@ switch($_REQUEST['state'])
             {
                 case 'give':
                 {
-                    $QUANTITY = array(
-                        'max' => $item->getQuantity(),
-                        'default' => $quantity, 
-                    );
-                    
-                    $renderer->assign('item_name',$item->getInflectedItemName());
-                    $renderer->assign('quantity',$QUANTITY);
-                    $renderer->assign('item_id',$item->getUserItemId());
-                    $renderer->display('items/give_form.tpl');
+                    if($item->getTransferableItem() == 'N')
+                    {
+                        $ERRORS[] = 'You cannot give this item away.';
+                    }
+
+                    if(sizeof($ERRORS) > 0)
+                    {
+                        draw_errors($ERRORS);
+                    }
+                    else
+                    {
+                        $QUANTITY = array(
+                            'max' => $item->getQuantity(),
+                            'default' => $quantity, 
+                        );
+                        
+                        $renderer->assign('item_name',$item->getInflectedItemName());
+                        $renderer->assign('quantity',$QUANTITY);
+                        $renderer->assign('item_id',$item->getUserItemId());
+                        $renderer->display('items/give_form.tpl');
+                    } // end no error
                 
                     break;
                 } // end give
@@ -141,16 +161,8 @@ switch($_REQUEST['state'])
                 case 'destroy':
                 {
                     $word = $item->makeActionText($quantity);
-                    if($quantity == $item->getQuantity())
-                    {
-                        $item->destroy();
-                    } // end destroy stack
-                    else
-                    {
-                        $item->setQuantity(($item->getQuantity() - $quantity));
-                        $item->save();
-                    } // end destroy some
-                    
+                    $item->updateQuantity(($item->getQuantity() - $quantity));
+                                        
                     $_SESSION['item_notice'] = "You have destroyed $word.";
 
                     redirect('items');
@@ -214,6 +226,7 @@ switch($_REQUEST['state'])
         $pet_id = stripinput($_POST['use']['pet_id']);
         $quantity = stripinput($_POST['use']['quantity']);
 
+$item = $item->getByLocation(array("location" => "inventory"));
         $item = Item::factory($id,$db);
         if($item == null)
         {
@@ -316,6 +329,7 @@ switch($_REQUEST['state'])
         $other_user_name = stripinput($_REQUEST['give']['username']);
         $quantity = stripinput($_REQUEST['give']['quantity']);
 
+$item = $item->getByLocation(array("location" => "inventory"));
         $item = Item::factory($id,$db);
         if($item == null)
         {
@@ -326,6 +340,11 @@ switch($_REQUEST['state'])
             if($item->getUserId() != $User->getUserId())
             {
                 $ERRORS[] = 'This is not your item.';
+            }
+
+            if($item->getTransferableItem() == 'N')
+            {
+                $ERRORS[] = 'You cannot give this item away.';
             }
 
             if($quantity > $item->getQuantity())
@@ -353,6 +372,22 @@ switch($_REQUEST['state'])
         {
             $ERRORS[] = 'You cannot give an item to yourself.';
         }
+
+        if($item != null && $other_user != null)
+        {
+            if($item->getUniqueItem() == 'Y')
+            {
+                if($other_user->hasItem($item->getItemTypeId()) == true)
+                {
+                    $ERRORS[] = 'That user already has this unique item!';
+                }
+                elseif($quantity > 1)
+                {
+                    // This case should never come up...
+                    $ERRORS[] = 'This is a unique item; you cannot give the user two!';
+                }
+            }
+        } // end item and user exist
 
         if(sizeof($ERRORS) > 0)
         {

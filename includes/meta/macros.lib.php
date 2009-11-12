@@ -159,7 +159,7 @@ function format_currency($number)
     $word = $APP_CONFIG['currency_name_plural'];
     if($number == 1)
     {
-        $word = $APP_CONFIG['currenct_name_singular'];
+        $word = $APP_CONFIG['currency_name_singular'];
     }
     
     return number_format($number).' '.strtolower($word);
