@@ -1,0 +1,1 @@
+<p>Thank you for your message, press {mgurl slug='chat' link_text=back} to go back.

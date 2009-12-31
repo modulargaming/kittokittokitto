@@ -1,0 +1,87 @@
+ _______           __         __             
+|   |   |.-----.--|  |.--.--.|  |.---.-.----.
+|       ||  _  |  _  ||  |  ||  ||  _  |   _|
+|__|_|__||_____|_____||_____||__||___._|__|  
+                                             
+ _______                  __              
+|     __|.---.-.--------.|__|.-----.-----.
+|    |  ||  _  |        ||  ||     |  _  |
+|_______||___._|__|__|__||__||__|__|___  |
+                                   |_____|
+
+=================================================
+
+Welcome to ModularGaming, a PHP5 OOP web game framework.
+Modular Gaming is forked off a project called KittoKittoKitto.
+
+MG's goals are simple:
+    
+    * Help new webgame developers get off the ground as quickly as possible.
+      Writing the whole register/login/boards/adopt web thing over and over
+      is a pointless waste of time.
+
+      That said, it is not within the scope of MG to provide *everything*
+      you would see in a run-of-the-mill webgame. What is in this package is
+      every major feature a basic installation of MG is going to provide.
+      
+      There is no battle stadium or trading post. There are not even user
+      shops! The purpose of MG is to provide *the very basic* components.
+      It is my personal belief that providing *too much* functionaility will
+      just encourage dozens of sites using the MG code and *no*
+      custmizations to speak of will spring up.
+      
+      Your game should be unique - but that does not mean you should waste
+      time re-inventing the wheel. We will probably be publishing several
+      extensions to MG to add those functions, but they will be optional
+      (and, of course, Free) add-ons.  
+    
+    * Help educate brand-new and novice programmers by giving them a well-
+      designed application to hack away at. The code in MG will (hopefully)
+      service as an inspiration light of Best Practices and Brilliantly DRY
+      code to the next generation of web-game developers.  
+    
+== Installation ==
+See the ModularGaming site for installation instructions.
+
+<http://www.modulargaming.com/projects/modulargaming/wiki/MgGuide>
+== Post-Installation ==
+My tips to you at this point:
+    
+    * Read through the code. Learn where things go in the directory tree. There
+      really isn't that much code to look at - most of the work is being done
+      by ActiveTable automagically.
+
+    * __LEARN HOW TO USE ACTIVETABLE__. It's a brand-new library, and docs are
+      still forthcoming (although there's pretty good in-line documentation that
+      can be compiled into HTML with phpdocumentor), but ActiveTable is a 
+      *SERIOUS* timesaver. Without it, I would not have been able to write
+      MG in (literally) five days. 
+
+      There's some documentation for the library at 
+      <http://aphp.yasashiisyndicate.org>. It's not complete, but it's not 
+      exactly sparse, either. 
+      
+      Writing and debugging SQL is a bitch. It's error-prone. It's a timesink. 
+      Why not have most of your SQL written for you by ActiveTable? ;-)
+
+      Furthermore, ActiveTable uses PEAR::DB#prepare()/PEAR::DB#execute() for
+      all of its operations, so you're absolutely safe from SQL injection,
+      even if you don't use stripinput() in whatever you're passing it. How
+      can you pass that up?
+
+   * Use Smarty templates. As you can see, they keep all of your script files
+     very small, clean, and easy-to-read. Plus, Smarty has a kickass caching
+     engine, so when you realize the boards are causing high server loads, you
+     can have Smarty cache the HTML it generates with a few extra lines. 
+     
+     No SQL/HTML generation = less load. You can even have Smarty expire a 
+     cached template whenever someone makes a new post. Believe me - Smarty
+     has a lot of features that make it worth learning.
+     
+     The Smarty manual is available at <http://smarty.php.net>. Give it a once-
+     over, at the very least!
+
+
+ModularGaming has been brought to you by the Modular Gaming community. 
+<http://modulargaming.com>
+

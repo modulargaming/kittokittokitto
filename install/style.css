@@ -1,0 +1,69 @@
+/* Body */
+body,td,th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+body {
+	margin:0;
+	padding:4px 0 0 0;
+	color:#666666;
+}
+form {
+	padding:0;
+	margin:0;
+}
+
+#wrapper {
+width: 800px;
+margin: 0 auto;
+}
+
+/* Links */
+a:link {
+	color: #666666;
+	text-decoration: none;
+}
+a:visited {
+	color: #666666;
+	text-decoration: none;
+}
+a:hover {
+	color: #990000;
+	text-decoration: underline;
+}
+
+.license {
+	border:1px solid #CCCCCC;
+	width: 99%;
+	height: 400px;
+}
+
+.yes {
+	color: #009900;
+	font-weight:bold;
+}
+.no {
+	color: #990000;
+	font-weight:bold;
+}
+
+.label {
+font-size: 15px;
+}
+
+#left {
+float: left;
+width: 400px;
+}
+
+#left_db {
+float: left;
+width: 400px;
+font-size: 10pt;
+line-height: 17pt;
+}
+
+#right {
+float: right;
+width: 400px;
+}

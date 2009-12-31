@@ -1,0 +1,128 @@
+Install Mg 
+Requirements 
+
+    * PHP >= 5.0
+    * MySQL >= 4
+    * PostgreSQL 8+
+    * Oracle 9i/10g might actually work with a few changes (grep the 
+includes/ directory for @rdbms-specific to see what you need to change - 
+there's not really that much marrying this to MySQL).
+    * Apache + mod_rewrite
+    * If you want to write lighttpd rewrite rules, PLEASE SEND THEM TO 
+ME!
+    * Microsoft IIS is not supported. If you have any skill with 
+ISAPI_Rewrite (or a similar mod_rewrite-like thing for IIS), please feel 
+free to write a set of rules and send them to me.
+    * The Windows XAMPP software is capable of running Modular Gaming, 
+but you must enable mod_rewrite for it to work. 
+
+If you're looking for hosting for Modular Gaming do post on the forums 
+as in certain cases we are able to provide you with free hosting.
+Installing (0.2.5< )(all new releases) 
+Prep Work 
+
+    * Unzip package and transmit its contents to your webserver.
+    * Open .htaccess file and change the line 'RewriteBase? /mg' to what 
+is appropriate for your installation. The /mg is the base path of your 
+installation. Examples:
+          o  http://demo.mg.domain.org = /
+          o  http://example.org/mg = /mg
+          o  http://example.org/apps/mg = /apps/mg 
+    * Visit yoursite.com/path/install/
+    * It will tell you to chmod a number of folder and files. It is 
+important that you do it
+    * Enter the information as you are told
+    * Erase install folder when you are told to do it (THIS IS 
+IMPORTANT)
+    * Sign up through the register page to create your user. The first 
+user will automatically be an admin user. 
+
+OLD INSTALL (0.2.4> ) 
+Prep Work 
+
+    * Unzip package and transmit its contents to your webserver.
+    * Visit yoursite.com/path/system_check.php to run the compatibility 
+check program.
+    * This will let you know if your webserver will work with Modular 
+Gaming, and if not, exactly why it will not work. 
+
+Code Setup 
+
+    * Chmod the /cache/ dir so that it is writable by the webserver.
+    * Chmod the /template/cache, /template/config/, and 
+/template/templates_c directories to be writable by the webserver. 
+However, DO NOT DO THIS TO /template/templates - that is insecure.
+    * Edit /includes/config.inc.php. You need to specify your 
+database/user/pw, the base path (on the filesystem), and the public 
+directory (the base URL), at the minimum. There are lots more options to 
+play with in there, though. Don't fret - there's lots of delicious 
+in-line documentation.
+    * Rename the '_htaccess' file to '.htaccess' (no quotes). Without 
+the mod_rewrite rules provided by this file, your installation will not 
+work.
+    * Open this file and change the line 'RewriteBase? /mg' to what is 
+appropriate for your installation. The /mg is the base path of your 
+installation. Examples:
+          o  http://demo.mg.domain.org = /
+          o  http://example.org/mg = /mg
+          o  http://example.org/apps/mg = /apps/mg 
+
+Database Setup 
+
+    * Load the installer/sql/mysql5_ddl.sql or 
+installer/sql/mysql4_ddl.sql file into your MySQL database. It contains 
+all of the table structures needed by this app.
+    * You're SOL if you want Oracle DDL. If you port it, please send the 
+SQL to me!
+    * If there is no _all.sql file you can generate one by running cat 
+*.sql > _all.sql
+    * Load some SQL files from installer/sql/mysql_data in to your 
+database. These contain seed data. To load all of the seed data at once, 
+load in the installer/sql/mysql_data/_all.sql file.
+    * You can opt to load in some data instead of all of it by loading 
+the tables in file-by-file. If you want to do this instead of using 
+_all.sql, note that the following files are *REQUIRED* to have your site 
+work. If these files are not loaded, it *WILL* cause your installation 
+to be inoperable. 
+
++ jump_pages.sql + datetime_format.sql + timezone.sql + 
+staff_permission.sql o Unless you are an advanced MG developer and know 
+*exactly* what you are doing, you will need to load these files to have 
+your site be useful: + cron_tab.sql + item_class.sql + staff_group.sql
+
+Note: If you are new to Modular Gaming, I strongly advise you load *all* 
+of the sample data in, and not just those few files. Even if you intend 
+to delete the pets and item_types as soon as your installation is 
+complete, they will provide you with an idea of how everything fits 
+together in the admin panel.
+Create Admin User 
+
+There is nothing special done by the registration page for the first 
+user created. It will be a normal user account. Since there are no other 
+admin accounts, you will need to take some action to make the user an 
+administrator. Once this bootstrapping is done, you can change a user's 
+permissions through the admin panel.
+
+    * Sign up through the register page to create your user. You can 
+check this by clicking on your username - the number at the end of the 
+URL is your user ID. I will use 1 in this example.
+    * If you have loaded the staff_group.sql data file, you can run 
+these two queries to give your account admin rights: 
+
+-- If you get a 'ERROR 1062 (23000): Duplicate entry '1-1' for key 2' 
+error, that means this relationship is already built (it's OK), so 
+please proceed.
+
+INSERT INTO user_staff_group (user_id,staff_group_id) VALUES (1,1);
+INSERT INTO staff_group_staff_permission 
+(staff_group_id,staff_permission_id) SELECT 1 AS group_id, 
+staff_permission_id FROM staff_permission;
+
+Finalizing 
+
+Once you have verified your MG install works, you can disable access to 
+the system_check.php file (read as: you can delete it, but if you are 
+going to write to me and ask for help, you need to send me this script's 
+output**, so you might want to just move it outside of the public_html 
+folder). You can move on to the Introduction for Developers guide now. 
+
